@@ -1,0 +1,219 @@
+/* 全局样式 */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+}
+
+.footer {
+    margin-top: auto;
+}
+
+/* 卡片样式 */
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 导航栏样式 */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* 列表样式 */
+.list-group-item {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* 表格样式 */
+.table th {
+    background-color: #f8f9fa;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 按钮样式 */
+.btn {
+    border-radius: 4px;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+/* 搜索框样式 */
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .card {
+        margin-bottom: 15px;
+    }
+}
+
+/* 高亮显示 */
+.highlight {
+    background-color: #fff3cd;
+}
+
+/* 加载动画 */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 3px solid #0d6efd;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 模态框样式 */
+.modal-content {
+    border-radius: 8px;
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* 文件上传区域样式 */
+.input-group {
+    margin-bottom: 15px;
+}
+
+/* 统计数字样式 */
+.card-text {
+    font-size: 24px;
+    font-weight: normal;
+    color: #333;
+}
+
+/* 项目详情样式 */
+#projectDetails {
+    padding: 15px;
+}
+
+/* 排班表样式 */
+#scheduleTable th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 1;
+}
+
+/* 工具提示样式 */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 统一所有模块标题样式 */
+.card-title,
+#project-distribution .card-title,
+#holiday-schedule .card-title,
+#home .card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    letter-spacing: 1px;
+}
+
+.btn, .form-control, .table td, .list-group-item, .modal, .input-group, .card-text, .card-body, .footer, .table {
+    font-size: 0.9rem;
+}
+
+/* 排班表周期标题字体大小 */
+#scheduleTable ~ h5,
+#holiday-schedule h5.mb-3 {
+    font-size: 0.9rem !important;
+    font-weight: normal;
+    color: #333;
+}
+
+/* 筛选项目下拉框字体大小 */
+#projectFilter, #projectFilter option, .form-select {
+    font-size: 0.9rem !important;
+}
+
+div#holiday-schedule table#scheduleTable,
+div#holiday-schedule table#scheduleTable th,
+div#holiday-schedule table#scheduleTable td,
+div#holiday-schedule table#scheduleTable tr:first-child th,
+div#holiday-schedule table#scheduleTable tr:first-child td {
+    font-size: 0.9rem !important;
+    font-weight: normal !important;
+}
+
+.btn-export {
+    background-color: #fff !important;
+    border: 1.5px solid #0d6efd !important;
+    color: #0d6efd !important;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-export:hover, .btn-export:focus {
+    background-color: #e3f0ff !important;
+    color: #0a58ca !important;
+    border-color: #0a58ca !important;
+} 

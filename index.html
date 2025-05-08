@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目人员信息管理系统</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入 Bootstrap Select CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <!-- 引入 Font Awesome 图标 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 引入自定义样式 -->
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">运维项目工程师排班系统</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-page="home">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="project-distribution">运维项目成员信息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="personal-stats">工程师负载情况</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="project-daily-schedule">各项目日常排班安排</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="holiday-schedule">节假日排班</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <div class="container mt-4">
+        <!-- 首页内容 -->
+        <div id="home" class="page-content">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">运维项目总数</h5>
+                            <p class="card-text" id="totalProjects">加载中...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">服务经理总数</h5>
+                            <p class="card-text" id="totalManagers">加载中...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">工程师总数</h5>
+                            <p class="card-text" id="totalEngineers">加载中...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 首页数据管理区域只保留上传和导出项目信息表 -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">数据管理</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-group mb-2">
+                                <input type="file" class="form-control" id="projectInfoFile" accept=".xlsx,.xls">
+                                <button class="btn btn-primary" id="uploadProjectInfo">上传运维项目信息表</button>
+                            </div>
+                            <button class="btn btn-outline-success w-100 btn-export" id="exportProjectInfo">导出运维项目信息表</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 项目人员分布页面 -->
+        <div id="project-distribution" class="page-content d-none">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">项目列表</h5>
+                            <input type="text" class="form-control mb-3" id="projectSearch" placeholder="搜索项目...">
+                            <div id="projectList" class="list-group">
+                                <!-- 项目列表将通过JavaScript动态加载 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">项目详情</h5>
+                            <div id="projectDetails">
+                                <!-- 项目详情将通过JavaScript动态加载 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 个人项目统计页面 -->
+        <div id="personal-stats" class="page-content d-none">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <select class="form-select" id="personType">
+                                <option value="manager">服务经理</option>
+                                <option value="engineer">工程师</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="personSearch" placeholder="搜索人员...">
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>类别</th>
+                                    <th>负责项目</th>
+                                    <th id="sortProjectCount" style="cursor:pointer;">项目数量 <span id="projectCountSortIcon">▼</span></th>
+                                    <th>分值总和</th>
+                                </tr>
+                            </thead>
+                            <tbody id="personStatsTable">
+                                <!-- 统计数据将通过JavaScript动态加载 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 各项目日常排班安排页面 -->
+        <div id="project-daily-schedule" class="page-content d-none">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">各项目日常排班安排</h5>
+                    <form class="row g-3 mb-3" id="dailyScheduleFilterForm">
+                        <div class="col-md-3">
+                            <label class="form-label">选择项目</label>
+                            <select class="form-select" id="dailyProjectSelect">
+                                <option value="all">全部项目</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">排班类型</label>
+                            <select class="form-select" id="dailyTypeSelect">
+                                <option value="week">日常非工作时间排班</option>
+                                <option value="month">每月值班</option>
+                                <option value="custom">自定义排班</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3" id="customCycleDaysArea" style="display:none;">
+                            <label class="form-label">轮班周期（天）</label>
+                            <input type="number" class="form-control" id="customCycleDays" min="1" value="3">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">排班起始日期</label>
+                            <input type="date" class="form-control" id="dailyStartDate">
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary w-100" id="generateDailySchedule">生成排班表</button>
+                        </div>
+                    </form>
+                    <div class="mb-3" id="engineerOrderArea"></div>
+                    <div class="mb-3">
+                        <button class="btn btn-export" id="exportDailySchedule">导出排班表</button>
+                        <button class="btn btn-secondary ms-2" id="showDailyHistory">历史记录</button>
+                        <button class="btn btn-outline-primary ms-2" id="toggleCalendarView">切换为日历视图</button>
+                        <button class="btn btn-outline-success ms-2" id="exportDailyByDay">导出为按天表格</button>
+                        <button class="btn btn-outline-info ms-2" id="exportDailyMonthView">导出为月视图表格</button>
+                    </div>
+                    <div id="dailyScheduleTableArea"></div>
+                    <div id="calendarViewArea" style="display:none;">
+                        <div class="d-flex justify-content-between align-items-center mb-2" id="calendarNavBar">
+                            <button class="btn btn-sm btn-outline-primary" id="calendarPrevMonth">上一月</button>
+                            <span id="calendarMonthLabel" style="font-weight:bold;"></span>
+                            <button class="btn btn-sm btn-outline-primary" id="calendarNextMonth">下一月</button>
+                        </div>
+                        <div id="calendarTableArea"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 历史记录模态框 -->
+            <div class="modal fade" id="dailyHistoryModal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">排班历史记录</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body" id="dailyHistoryList">
+                            <!-- 历史记录列表 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 节假日排班页面 -->
+        <div id="holiday-schedule" class="page-content d-none">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">排班规则 <button class="btn btn-link btn-sm" id="toggleRules">显示/隐藏</button></h5>
+                    <div id="scheduleRules" style="display:none;"></div>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">按工程师维度展示排班</h5>
+                    <div id="engineerScheduleArea">
+                        <!-- 工程师维度排班展示 -->
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">排班表生成</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="startDate" class="form-label">开始日期</label>
+                            <input type="date" class="form-control" id="startDate" placeholder="yyyy/mm/dd">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="endDate" class="form-label">结束日期</label>
+                            <input type="date" class="form-control" id="endDate" placeholder="yyyy/mm/dd">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button class="btn btn-primary" id="generateSchedule">生成排班表</button>
+                        </div>
+                    </div>
+                    <!-- 新增项目筛选下拉框 -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="projectFilter" class="form-label">筛选项目</label>
+                            <select class="form-select" id="projectFilter">
+                                <option value="all">全部项目</option>
+                                <!-- 选项通过JS动态生成 -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="scheduleTable">
+                            <!-- 排班表将通过JavaScript动态加载 -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">数据管理</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-success btn-export" id="exportSchedule">导出排班表</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer mt-5 py-3 bg-light">
+        <div class="container text-center">
+            <p class="mb-0">© 2025 运维项目工程师排班系统 | <a href="#" data-bs-toggle="modal" data-bs-target="#contactModal">联系我们</a></p>
+        </div>
+    </footer>
+
+    <!-- 联系我们模态框 -->
+    <div class="modal fade" id="contactModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">联系我们</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>如有任何问题，请联系Mia。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通用提示模态框 -->
+    <div class="modal fade" id="customAlertModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="customAlertTitle">提示</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="customAlertBody"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 引入必要的JavaScript库 -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <!-- 引入 Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 引入 Bootstrap Select JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <!-- 引入自定义脚本 -->
+    <script src="script.js"></script>
+</body>
+</html> 
